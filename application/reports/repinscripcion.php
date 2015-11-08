@@ -1,0 +1,158 @@
+<?php
+require_once 'application/reports/fpdf.php';
+//require('application/reports/fpdf.php');
+
+class ComprobanteInscripcion extends FPDF
+{
+    
+    function Header() //Encabezado
+    {
+        //Define tipo de letra a usar, Arial, Negrita, 15
+        $this->SetFont('Arial','B',9);
+ 
+        /* Líneas paralelas
+         * Line(x1,y1,x2,y2)
+         * El origen es la esquina superior izquierda
+         * Cambien los parámetros y chequen las posiciones
+         * */
+        //$this->Line(10,10,206,10);
+        //$this->Line(10,35.5,206,35.5);
+ 
+        /* Explicaré el primer Cell() (Los siguientes son similares)
+         * 30 : de ancho
+         * 25 : de alto
+         * ' ' : sin texto
+         * 0 : sin borde
+         * 0 : Lo siguiente en el código va a la derecha (en este caso la segunda celda)
+         * 'C' : Texto Centrado
+         * $this->Image('images/logo.png', 152,12, 19) Método para insertar imagen
+         *     'images/logo.png' : ruta de la imagen
+         *     152 : posición X (recordar que el origen es la esquina superior izquierda)
+         *     12 : posición Y
+         *     19 : Ancho de la imagen <span class="wp-smiley emoji emoji-wordpress" title="(w)">(w)</span>
+         *     Nota: Al no especificar el alto de la imagen (h), éste se calcula automáticamente
+         * */
+        
+        $this->Image('public/images/spazio.jpg',10,11,33);
+        $this->Cell(30,25,'',0,0,'C');
+        $this->Cell(111,25,'SPAZIO FITNESS',0,0,'C');
+ 
+    }
+    
+    function Footer() // Pie de página
+    {
+        // Posición: a 1,5 cm del final
+        $this->SetY(-155);
+        // Arial italic 8
+        $this->SetFont('Arial','I',10);
+        /* Cell(ancho, alto, txt, border, ln, alineacion)
+         * ancho=0, extiende el ancho de celda hasta el margen de la derecha
+         * alto=10, altura de la celda a 10
+         * txt= Texto a ser impreso dentro de la celda
+         * border=T Pone margen en la posición Top (arriba) de la celda
+         * ln=0 Indica dónde sigue el texto después de llamada a Cell(), en este caso con 0, enseguida de nuestro texto
+         * alineación=C Texto alineado al centro
+         */
+        //$this->Cell(0,10,'Nota: Esta empresa no se hace responsable por accidentes o daños a la salud como consecuencia de enfermedades ya presentes en el individuo. ','',0,'C');
+        
+        $txt = 'Nota: Esta empresa no se hace responsable por accidentes o daños a la salud como consecuencia de enfermedades ya presentes en el individuo. ';
+        $this->SetLeftMargin(20);
+        $this->SetRightMargin(20);
+        $this->MultiCell(0,5,$txt,0,'L');
+        
+    }     
+    
+    function ImprimirTexto($persona)
+    {      
+        $this->Rect(10, 10, 196, 130);
+        $this->SetFont('Arial','',12);
+        
+        $horY = 60; //coordenada Y de las lineas horizontales
+        $this->SetY($horY - 5);
+        
+        /*
+         * 0 - el ancho se ajusta al margen de la hoja
+         * 5 - alto de la celda
+         * $txt - Texto a imrpimir.
+         * NOTA: Los valores para justificar el texto y celda sin borde
+         *       no los pasé, porque son valores por defecto del mismo método
+         *
+         * Pero quedaría así: MutiCell(0, 5, $txt, 0, 'J')
+         * No olviden ver y 'jugar' con los parámetros
+         **/        
+        $txt = "Nombre:   " . utf8_decode($persona->nombre) . " " . utf8_decode($persona->apaterno) . " " . utf8_decode($persona->amaterno); 
+        $this->SetX(20);
+        $this->MultiCell(0,5,$txt);
+        $this->Line(38,$horY,180,$horY);
+        $this->Ln();
+        $horY += 10;
+        
+        $direccion = $persona->direccion;
+        $direccion = utf8_decode(substr($direccion,0,60));
+        $txt = "Dirección:   $direccion";
+        $this->SetX(20);
+        $this->MultiCell(0,5,$txt);
+        $this->Line(42,$horY,180,$horY);
+        $this->Ln();
+        $horY += 10;        
+        
+        $txt = "Teléfono:   " . $persona->telefono;       
+        $this->SetX(20);
+        $this->MultiCell(0,5,$txt);
+        $this->Line(40,$horY,180,$horY);
+        $this->Ln();
+        $horY += 10;        
+        
+        $txt = "Correo Electrónico:   $persona->email"; 
+        $this->SetX(20);
+        $this->MultiCell(0,5,$txt);
+        $this->Line(59,$horY,180,$horY);        
+        $this->Ln();
+        $horY += 10;
+        
+        $txt = "En Caso de Emergencia:   " . utf8_decode($persona->contacto); 
+        $this->SetX(20);
+        $this->MultiCell(0,5,$txt);
+        $this->Line(70,$horY,180,$horY);                
+        $this->Ln();        
+        $horY += 10;
+        
+        $txt = "Teléfono:   " . $persona->contactotelefono;       
+        $this->SetX(20);
+        $this->MultiCell(0,5,$txt);
+        $this->Line(40,$horY,180,$horY);
+        $this->Ln();
+        $horY += 10;        
+        
+    }    
+            
+}
+
+    $pdf = new ComprobanteInscripcion;  //Crea objeto PDF
+    $pdf->AddPage('P', 'Letter'); //Agrega hoja, Vertical, Carta
+    
+    $fecha = date("d/m/Y", strtotime($persona->fechainscripcion));
+    $pdf->SetRightMargin(20);
+    $pdf->Cell(0,10,"Fecha: $fecha",0,1,'R');
+    $pdf->Cell(0,10,"Tarifa: $$persona->montoinscripcion M.N.",0,1,'R');
+    
+    $pdf->SetFont('Arial','B',12); //Arial, negrita, 12 puntos
+    /* Explicación:
+        * 0 - La celda se extiende a todo lo ancho de la hoja
+        * 10 - Alto de la celda
+        * $fecha - la cadena a imprimir
+        * 0 - sin borde (cambien a 1 y chequen el cambio)
+        * 1 - Lo que sigue a la celda estará en la siguiente línea
+        * 'R' - Texto alineado a la derecha
+        * */
+    $pdf->Cell(0,10,'INSCRIPCIÓN',0,1,'C');
+    
+    /* Se hace un salto de línea
+        * y se manda llamar el método de imprimir texto,
+        * envíando como parámetro el nombre del archivo
+        * que contiene el texto.
+    * */
+    $pdf->Ln();
+    $pdf->ImprimirTexto($persona);    
+        
+    $pdf->Output();               //Salida al navegador

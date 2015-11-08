@@ -1,0 +1,24 @@
+﻿{
+    "sProcessing":     "<div style=\"text-align:center\"><i class=\"fa fa-spinner fa-spin fa-3x\"></i> Procesando...</div>",
+    "sLengthMenu":     "Mostrar _MENU_ registros",
+    "sZeroRecords":    "<div style=\"text-align:center\"><i class=\"fa fa-lg fa-exclamation-circle \"></i>   No se encontraron resultados</div>",
+    "sEmptyTable":     "<div style=\"text-align:center\"><i class=\"fa fa-large fa-exclamation-circle \"></i>   Ningún dato disponible en esta tabla</div>",
+    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+    "sInfoFiltered":   "(<i class=\"fa fa-fw fa-search\"></i> filtrado de un total de _MAX_ registros)",
+    "sInfoPostFix":    "",
+    "sSearch":         "<i class=\"fa fa-fw fa-search\"></i> Filtrar:",
+    "sUrl":            "",
+    "sInfoThousands":  ",",
+    "sLoadingRecords": "<div style=\"text-align:center\"><i class=\"fa fa-spinner fa-spin fa-3x\"></i><p>Cargando...</p></div>",
+    "oPaginate": {
+        "sFirst":    "<i class=\"fa fa-lg fa-angle-double-left\"></i>",
+        "sLast":     "<i class=\"fa fa-lg fa-angle-double-right\"></i>",
+        "sNext":     "<i class=\"fa fa-lg fa-angle-right\"></i>",
+        "sPrevious": "<i class=\"fa fa-lg fa-angle-left\"></i>"
+    },
+    "oAria": {
+        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+    }
+}
